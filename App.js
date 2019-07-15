@@ -14,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  Button,
 } from 'react-native';
 
 import {
@@ -25,6 +26,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = () => {
+  const onPressLearnMore = () => {
+    console.log("Hi there!");
+  }
+
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />
@@ -39,6 +44,12 @@ const App = () => {
             </View>
           )}
           <View style={styles.body}>
+            <Button
+              onPress={onPressLearnMore}
+              title="Wallet"
+              color="#841584"
+              accessibilityLabel="Learn more about this purple button"
+            />
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
               <Text style={styles.sectionDescription}>
