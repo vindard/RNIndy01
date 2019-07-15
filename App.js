@@ -25,9 +25,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import LibIndy from './LibIndyNativeModule';
+
 const App = () => {
   const onPressLearnMore = () => {
     console.log("Hi there!");
+    LibIndy.exampleMethod();
   }
 
   return (

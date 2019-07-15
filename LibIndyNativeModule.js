@@ -6,6 +6,7 @@ const { LibIndy } = NativeModules
 
 export default {
   exampleMethod () {
+    console.log("Ran JS wrapper!");
     return LibIndy.exampleMethod()
   },
 
