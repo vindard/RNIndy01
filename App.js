@@ -28,9 +28,9 @@ import {
 import LibIndy from './LibIndyNativeModule';
 
 const App = () => {
-  const onPressLearnMore = () => {
+  const onPressLearnMore = async () => {
     console.log("Hi there!");
-    LibIndy.exampleMethod();
+    await LibIndy.exampleMethod();
   }
 
   return (

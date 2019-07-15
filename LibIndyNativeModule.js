@@ -5,9 +5,10 @@ import { NativeModules } from 'react-native'
 const { LibIndy } = NativeModules
 
 export default {
-  exampleMethod () {
+  async exampleMethod () {
     console.log("Ran JS wrapper!");
-    return LibIndy.exampleMethod()
+    const text = await LibIndy.exampleMethod();
+    console.log(text);
   },
 
   EXAMPLE_CONSTANT: LibIndy.EXAMPLE_CONSTANT

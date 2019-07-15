@@ -9,6 +9,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.Promise;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +47,11 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void exampleMethod () {
+    public void exampleMethod (Promise promise) {
         // An example native method that you will expose to React
         // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
+        String text = "Hi from Java!";
+        promise.resolve(text);
     }
 
     private static void emitDeviceEvent(String eventName, @Nullable WritableMap eventData) {
