@@ -14,9 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LibIndyModule extends ReactContextBaseJavaModule {
-    public static {
-        System.loadLibrary("indy");
-    }
+    // public static {
+    //     System.loadLibrary("indy");
+    // }
     public static final String REACT_CLASS = "LibIndy";
     private static ReactApplicationContext reactContext = null;
 
