@@ -9,6 +9,8 @@ export default {
     console.log("Ran JS wrapper!");
     const text = await LibIndy.exampleMethod();
     console.log(text);
+    const api = await LibIndy.init();
+    console.log(api);
   },
 
   EXAMPLE_CONSTANT: LibIndy.EXAMPLE_CONSTANT

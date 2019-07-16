@@ -14,10 +14,42 @@ import com.facebook.react.bridge.Promise;
 import java.util.HashMap;
 import java.util.Map;
 
+// experimental
+import android.system.Os;
+
+import java.io.File;
+
+import com.sun.jna.Callback;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
+// end experimental
+
+// make getExternalFileDir work
+import com.facebook.react.bridge.ReactApplicationContext;
+import android.content.Context;
+import android.os.Environment;
+import android.system.ErrnoException;
+// end make getExternalFileDir work
+
 public class LibIndyModule extends ReactContextBaseJavaModule {
+    public interface API extends Library {
+
+        // wallet.rs
+        public int indy_create_wallet(int command_handle, String config, String credentials, Callback cb);
+        public int indy_open_wallet(int command_handle, String config, String credentials, Callback cb);
+    }
     // public static {
     //     System.loadLibrary("indy");
     // }
+
+    // private ReactApplicationContext reactContext;
+
+    // public RNFSManager(ReactApplicationContext reactContext) {
+    //     super(reactContext);
+    //     this.reactContext = reactContext;
+    // }
+
     public static final String REACT_CLASS = "LibIndy";
     private static ReactApplicationContext reactContext = null;
 
@@ -29,6 +61,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         reactContext = context;
     }
 
+    
     @Override
     public String getName() {
         // Tell React the name of the module
@@ -53,6 +86,21 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         String text = "Hi from Java!";
         promise.resolve(text);
     }
+
+    @ReactMethod
+    public void init (Promise promise) {
+        File externalFilesDir = this.getReactApplicationContext().getExternalFilesDir(null);
+        String path = externalFilesDir.getAbsolutePath();
+        try {
+            Os.setenv("EXTERNAL_STORAGE", path, true);
+            // Os.setenv("EXTERNAL_STORAGE", getExternalFilesDir(null).getAbsolutePath(), true);
+        } catch (ErrnoException e) {
+            e.printStackTrace();
+}
+
+        API api = Native.loadLibrary("indy", API.class);
+        promise.resolve(api);
+}
 
     private static void emitDeviceEvent(String eventName, @Nullable WritableMap eventData) {
         // A method for emitting from the native side to JS
