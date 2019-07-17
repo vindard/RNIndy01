@@ -187,9 +187,16 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://repo.sovrin.org/repository/maven-public"
+    }
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation "org.hyperledger:indy:1.8.1-dev-985"
 
     if (enableHermes) {
       def hermesPath = "../../node_modules/hermesvm/android/";
