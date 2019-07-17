@@ -7,6 +7,7 @@ const { LibIndy } = NativeModules
 export default {
   async exampleMethod () {
     console.log("Ran JS wrapper!");
+    const api = await LibIndy.init();
     const text = await LibIndy.exampleMethod();
     console.log(text);
     const wallet = await LibIndy.createWallet();

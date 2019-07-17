@@ -17,15 +17,42 @@ import java.util.Map;
 // Maven import stuff
 import org.hyperledger.indy.sdk.wallet.Wallet;
 import org.hyperledger.indy.sdk.IndyException;
+import org.hyperledger.indy.sdk.LibIndy;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.concurrent.ExecutionException;
 // end Maven import stuff
 
+// experimental
+import android.system.Os;
+
+import java.io.File;
+
+import com.sun.jna.Callback;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.NativeLibrary;
+// end experimental
+
+// make getExternalFileDir work
+import com.facebook.react.bridge.ReactApplicationContext;
+import android.content.Context;
+import android.os.Environment;
+import android.system.ErrnoException;
+// end make getExternalFileDir work
+
 public class LibIndyModule extends ReactContextBaseJavaModule {
     // public static {
     //     System.loadLibrary("indy");
     // }
+
+    // private ReactApplicationContext reactContext;
+
+    // public RNFSManager(ReactApplicationContext reactContext) {
+    //     super(reactContext);
+    //     this.reactContext = reactContext;
+    // }
+
     public static final String REACT_CLASS = "LibIndy";
     private static ReactApplicationContext reactContext = null;
 
@@ -36,6 +63,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
 
         reactContext = context;
     }
+
 
     @Override
     public String getName() {
@@ -60,6 +88,20 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
         String text = "Hi from Java!";
         promise.resolve(text);
+    }
+
+    @ReactMethod
+    public void init (Promise promise) {
+        File externalFilesDir = this.getReactApplicationContext().getExternalFilesDir(null);
+        String path = externalFilesDir.getAbsolutePath();
+        try {
+            Os.setenv("EXTERNAL_STORAGE", path, true);
+            // Os.setenv("EXTERNAL_STORAGE", getExternalFilesDir(null).getAbsolutePath(), true);
+        } catch (ErrnoException e) {
+            e.printStackTrace();
+        }
+
+        LibIndy.init();
     }
 
     @ReactMethod
