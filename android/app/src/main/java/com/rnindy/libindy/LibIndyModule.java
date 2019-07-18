@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 // experimental
 import android.system.Os;
+import android.util.Log;
 
 import java.io.File;
 
@@ -94,6 +95,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
     public void init (Promise promise) {
         File externalFilesDir = this.getReactApplicationContext().getExternalFilesDir(null);
         String path = externalFilesDir.getAbsolutePath();
+        Log.v("LIBINDY", "this is the path" + path);
         try {
             Os.setenv("EXTERNAL_STORAGE", path, true);
             // Os.setenv("EXTERNAL_STORAGE", getExternalFilesDir(null).getAbsolutePath(), true);
@@ -102,6 +104,9 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         }
 
         LibIndy.init();
+        Log.v("LIBINDY", "Outside init()");
+        promise.resolve(12);
+        
     }
 
     @ReactMethod
