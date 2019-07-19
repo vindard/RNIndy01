@@ -12,7 +12,7 @@ export default {
     const text = await LibIndy.exampleMethod();
     console.log("Bye there2");
     const wallet = await LibIndy.createWallet();
-    console.log(wallet)
+    console.log("Wallet handle: ", wallet);
     console.log("Bye there3");
   },
 

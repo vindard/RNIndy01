@@ -114,7 +114,9 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         // An example native method that you will expose to React
         // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
         Wallet wallet = null;
+        int handle = -1;
 
+        Log.v("LIBINDY", "Inside createWallet()");
         try {
             final String WALLET = "Wallet1";
             final String TYPE = "default";
@@ -127,9 +129,11 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
                             .put("id", WALLET)
                             .put("storage_type", TYPE)
                             .toString();
+            Log.v("LIBINDY", "About to try to create wallet...");
             try {
                 Wallet.createWallet(WALLET_CONFIG, WALLET_CREDENTIALS).get();
             } catch (ExecutionException e) {
+                Log.v("LIBINDY", "ExecutionException:", e);
                 System.out.println( e.getMessage() );
                 if (e.getMessage().indexOf("WalletExistsException") >= 0) {
                     // ignore
@@ -137,8 +141,10 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
                     throw new RuntimeException(e);
                 }
             }
+            Log.v("LIBINDY", "About to try to OPEN wallet...");
             wallet = Wallet.openWallet(WALLET_CONFIG, WALLET_CREDENTIALS).get();
             System.out.println("===================> wallet:" + wallet);
+            handle = wallet.getWalletHandle();
         } catch (IndyException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -150,14 +156,15 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         } finally {
             if (wallet != null) {
                 try {
+                    Log.v("LIBINDY", "Closing wallet...");
                     wallet.closeWallet().get();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-
-        promise.resolve(wallet);
+        Log.v("LIBINDY", "Leaving createWallet()");
+        promise.resolve(Integer.toString(handle));
     }
 
     private static void emitDeviceEvent(String eventName, @Nullable WritableMap eventData) {
