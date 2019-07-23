@@ -25,6 +25,7 @@ import java.util.concurrent.ExecutionException;
 
 // experimental
 import android.system.Os;
+import android.util.Log;
 
 import java.io.File;
 
@@ -94,6 +95,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
     public void init (Promise promise) {
         File externalFilesDir = this.getReactApplicationContext().getExternalFilesDir(null);
         String path = externalFilesDir.getAbsolutePath();
+        Log.v("LIBINDY", "this is the path" + path);
         try {
             Os.setenv("EXTERNAL_STORAGE", path, true);
             // Os.setenv("EXTERNAL_STORAGE", getExternalFilesDir(null).getAbsolutePath(), true);
@@ -102,6 +104,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         }
 
         LibIndy.init();
+        Log.v("LIBINDY", "Outside init()");
     }
 
     @ReactMethod
@@ -110,6 +113,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
         Wallet wallet = null;
 
+        Log.v("LIBINDY", "Inside createWallet()");
         try {
             final String WALLET = "Wallet1";
             final String TYPE = "default";
@@ -122,9 +126,11 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
                             .put("id", WALLET)
                             .put("storage_type", TYPE)
                             .toString();
+            Log.v("LIBINDY", "About to try to create wallet...");
             try {
                 Wallet.createWallet(WALLET_CONFIG, WALLET_CREDENTIALS).get();
             } catch (ExecutionException e) {
+                Log.v("LIBINDY", "ExecutionException:", e);
                 System.out.println( e.getMessage() );
                 if (e.getMessage().indexOf("WalletExistsException") >= 0) {
                     // ignore
@@ -132,6 +138,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
                     throw new RuntimeException(e);
                 }
             }
+            Log.v("LIBINDY", "About to try to OPEN wallet...");
             wallet = Wallet.openWallet(WALLET_CONFIG, WALLET_CREDENTIALS).get();
             System.out.println("===================> wallet:" + wallet);
         } catch (IndyException e) {
@@ -145,13 +152,16 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         } finally {
             if (wallet != null) {
                 try {
+                    Log.v("LIBINDY", "Closing wallet...");
                     wallet.closeWallet().get();
+                    Log.v("LIBINDY", "Wallet closed!");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
 
+        Log.v("LIBINDY", "Leaving createWallet()");
         promise.resolve(wallet);
     }
 
