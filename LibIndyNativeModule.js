@@ -6,14 +6,15 @@ const { LibIndy } = NativeModules
 
 export default {
   async exampleMethod () {
-    console.log("Ran JS wrapperzzz!");
+    console.log("Ran JS wrapper!");
     const api = await LibIndy.init();
-    console.log("Bye there1");
+    console.log("Loaded Libindy library (LibIndy.init)");
     const text = await LibIndy.exampleMethod();
-    console.log("Bye there2");
+    console.log("Ran example method from Java:", text);
+    console.log("Running async Libindy.createWallet() method...");
     const wallet = await LibIndy.createWallet();
     console.log("Wallet handle: ", wallet);
-    console.log("Bye there3");
+    console.log("Ran createWallet()!");
   },
 
   EXAMPLE_CONSTANT: LibIndy.EXAMPLE_CONSTANT
