@@ -112,6 +112,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         // An example native method that you will expose to React
         // https://facebook.github.io/react-native/docs/native-modules-android.html#the-toast-module
         Wallet wallet = null;
+        int handle = -1;
 
         Log.v("LIBINDY", "Inside createWallet()");
         try {
@@ -141,6 +142,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
             Log.v("LIBINDY", "About to try to OPEN wallet...");
             wallet = Wallet.openWallet(WALLET_CONFIG, WALLET_CREDENTIALS).get();
             System.out.println("===================> wallet:" + wallet);
+            handle = wallet.getWalletHandle();
         } catch (IndyException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -162,7 +164,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
         }
 
         Log.v("LIBINDY", "Leaving createWallet()");
-        promise.resolve(wallet);
+        promise.resolve( Integer.toString(handle) );
     }
 
     private static void emitDeviceEvent(String eventName, @Nullable WritableMap eventData) {
