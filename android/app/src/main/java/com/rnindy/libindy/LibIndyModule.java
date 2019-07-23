@@ -92,7 +92,7 @@ public class LibIndyModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void init (Promise promise) {
+    public void init () {
         File externalFilesDir = this.getReactApplicationContext().getExternalFilesDir(null);
         String path = externalFilesDir.getAbsolutePath();
         Log.v("LIBINDY", "this is the path" + path);
